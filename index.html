@@ -4,101 +4,512 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Word of the Day</title>
   <style>
+    :root {
+      --ink: #1f2937;
+      --muted: #5f6b7a;
+      --blue: #2f5fda;
+      --card: rgba(255, 255, 255, 0.82);
+    }
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: grid;
       place-items: center;
-      font-family: system-ui, -apple-system, sans-serif;
-      background: #fff8e7;
-      color: #222;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255, 214, 165, 0.65), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(169, 222, 249, 0.7), transparent 32%),
+        linear-gradient(180deg, #eef6ff 0%, #f8fbff 48%, #fff8e7 100%);
+      color: var(--ink);
       text-align: center;
       padding: 24px;
+      box-sizing: border-box;
     }
     .card {
-      max-width: 700px;
+      width: min(760px, 100%);
+      background: var(--card);
+      padding: clamp(28px, 7vw, 56px);
+      border-radius: 32px;
+      box-shadow: 0 18px 44px rgba(47, 95, 218, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(8px);
+      box-sizing: border-box;
+    }
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 16px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(47, 95, 218, 0.09);
+      color: var(--blue);
+      font-size: clamp(14px, 3vw, 18px);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
     }
     .date {
-      font-size: 20px;
-      margin-bottom: 24px;
-      color: #666;
+      font-size: clamp(18px, 4vw, 24px);
+      margin-bottom: 18px;
+      color: var(--muted);
+      font-weight: 650;
     }
     .word {
-      font-size: clamp(64px, 14vw, 140px);
-      font-weight: 900;
-      letter-spacing: -0.04em;
-      margin-bottom: 20px;
+      font-size: clamp(54px, 14vw, 124px);
+      font-weight: 950;
+      letter-spacing: -0.055em;
+      line-height: 0.95;
+      margin: 8px 0 24px;
+      color: var(--blue);
+      overflow-wrap: anywhere;
     }
     .definition {
-      font-size: clamp(24px, 5vw, 42px);
-      line-height: 1.25;
-      font-weight: 500;
+      font-size: clamp(24px, 5.4vw, 42px);
+      line-height: 1.22;
+      font-weight: 700;
+      color: #2b3440;
     }
     .sentence {
-      margin-top: 28px;
-      font-size: clamp(20px, 4vw, 32px);
-      color: #444;
+      margin: 30px auto 0;
+      max-width: 620px;
+      font-size: clamp(20px, 4.3vw, 31px);
+      line-height: 1.32;
+      color: #4b5563;
       font-style: italic;
+    }
+    .challenge {
+      margin-top: 28px;
+      font-size: clamp(17px, 3.8vw, 24px);
+      color: #365314;
+      background: rgba(190, 242, 100, 0.28);
+      padding: 14px 18px;
+      border-radius: 18px;
+      font-weight: 750;
     }
   </style>
 </head>
 <body>
-  <div class="card">
+  <main class="card">
+    <div class="eyebrow">Word of the Day</div>
     <div class="date" id="date"></div>
     <div class="word" id="word"></div>
     <div class="definition" id="definition"></div>
     <div class="sentence" id="sentence"></div>
-  </div>
+    <div class="challenge" id="challenge"></div>
+  </main>
 
   <script>
     const words = [
       {
-        word: "curious",
-        definition: "wanting to learn or know more",
-        sentence: "She was curious about how bees make honey."
+            "word": "curious",
+            "definition": "wanting to learn or know more",
+            "sentence": "She was curious about how bees make honey."
       },
       {
-        word: "brave",
-        definition: "doing something even when it feels scary",
-        sentence: "He was brave when he tried the big slide."
+            "word": "brave",
+            "definition": "doing something even when it feels scary",
+            "sentence": "He was brave when he tried the tall slide."
       },
       {
-        word: "enormous",
-        definition: "very, very big",
-        sentence: "The elephant had enormous ears."
+            "word": "enormous",
+            "definition": "very, very big",
+            "sentence": "The enormous tree gave us shade."
       },
       {
-        word: "gentle",
-        definition: "kind, soft, and careful",
-        sentence: "Use gentle hands with the kitten."
+            "word": "gentle",
+            "definition": "kind, soft, and careful",
+            "sentence": "Use gentle hands with the kitten."
       },
       {
-        word: "wander",
-        definition: "to walk around without a plan",
-        sentence: "We wandered through the garden."
+            "word": "wander",
+            "definition": "to walk around without a plan",
+            "sentence": "We wandered through the garden."
       },
       {
-        word: "gleam",
-        definition: "to shine softly",
-        sentence: "The stars gleam in the dark sky."
+            "word": "gleam",
+            "definition": "to shine softly",
+            "sentence": "The stars gleam in the dark sky."
       },
       {
-        word: "patient",
-        definition: "able to wait calmly",
-        sentence: "She was patient while her cookies baked."
+            "word": "patient",
+            "definition": "able to wait calmly",
+            "sentence": "She was patient while the cookies baked."
+      },
+      {
+            "word": "sturdy",
+            "definition": "strong and hard to break",
+            "sentence": "The sturdy chair did not wobble."
+      },
+      {
+            "word": "discover",
+            "definition": "to find something new",
+            "sentence": "They hoped to discover a hidden trail."
+      },
+      {
+            "word": "eager",
+            "definition": "excited and ready",
+            "sentence": "He was eager to start the game."
+      },
+      {
+            "word": "observe",
+            "definition": "to watch carefully",
+            "sentence": "Scientists observe animals to learn about them."
+      },
+      {
+            "word": "fragile",
+            "definition": "easy to break",
+            "sentence": "The fragile shell cracked in her hand."
+      },
+      {
+            "word": "journey",
+            "definition": "a trip from one place to another",
+            "sentence": "Their journey took them across the mountains."
+      },
+      {
+            "word": "clever",
+            "definition": "good at solving problems",
+            "sentence": "The clever fox found a way out."
+      },
+      {
+            "word": "vanish",
+            "definition": "to disappear",
+            "sentence": "The rabbit seemed to vanish behind the bush."
+      },
+      {
+            "word": "peaceful",
+            "definition": "calm and quiet",
+            "sentence": "The lake was peaceful in the morning."
+      },
+      {
+            "word": "predict",
+            "definition": "to make a smart guess about what will happen",
+            "sentence": "Can you predict what will happen next in the story?"
+      },
+      {
+            "word": "explore",
+            "definition": "to look around and learn about something",
+            "sentence": "We explored the tide pools at the beach."
+      },
+      {
+            "word": "admire",
+            "definition": "to think something is very good",
+            "sentence": "I admire how hard you worked on that drawing."
+      },
+      {
+            "word": "rescue",
+            "definition": "to save from danger",
+            "sentence": "The firefighter helped rescue the dog."
+      },
+      {
+            "word": "remarkable",
+            "definition": "special or unusual in a good way",
+            "sentence": "Her remarkable memory helped her remember every line."
+      },
+      {
+            "word": "cautious",
+            "definition": "careful to avoid mistakes or danger",
+            "sentence": "Be cautious when the sidewalk is icy."
+      },
+      {
+            "word": "confident",
+            "definition": "believing you can do something",
+            "sentence": "She felt confident before her spelling test."
+      },
+      {
+            "word": "investigate",
+            "definition": "to look carefully for answers",
+            "sentence": "The detective investigated the missing cookie."
+      },
+      {
+            "word": "grateful",
+            "definition": "thankful",
+            "sentence": "He was grateful for his friend's help."
+      },
+      {
+            "word": "ancient",
+            "definition": "very old",
+            "sentence": "The museum had ancient tools and coins."
+      },
+      {
+            "word": "challenge",
+            "definition": "something difficult that helps you grow",
+            "sentence": "Learning to ride a bike can be a challenge."
+      },
+      {
+            "word": "notice",
+            "definition": "to see or pay attention to something",
+            "sentence": "Did you notice the tiny bird in the tree?"
+      },
+      {
+            "word": "compete",
+            "definition": "to try to win",
+            "sentence": "The teams compete in the soccer game."
+      },
+      {
+            "word": "decide",
+            "definition": "to choose after thinking",
+            "sentence": "She had to decide which book to read first."
+      },
+      {
+            "word": "concentrate",
+            "definition": "to focus carefully",
+            "sentence": "It is easier to read when you concentrate."
+      },
+      {
+            "word": "generous",
+            "definition": "willing to share or help",
+            "sentence": "Her generous brother shared his markers."
+      },
+      {
+            "word": "convince",
+            "definition": "to help someone believe or agree",
+            "sentence": "He tried to convince Dad to read one more chapter."
+      },
+      {
+            "word": "avoid",
+            "definition": "to stay away from something",
+            "sentence": "We avoid puddles when we wear sneakers."
+      },
+      {
+            "word": "triumph",
+            "definition": "a great success",
+            "sentence": "Finishing the puzzle felt like a triumph."
+      },
+      {
+            "word": "describe",
+            "definition": "to tell what something is like",
+            "sentence": "Can you describe the dragon in the story?"
+      },
+      {
+            "word": "imagine",
+            "definition": "to make a picture in your mind",
+            "sentence": "Imagine you are flying over the city."
+      },
+      {
+            "word": "courage",
+            "definition": "bravery when something is hard or scary",
+            "sentence": "It took courage to sing on stage."
+      },
+      {
+            "word": "depend",
+            "definition": "to need help from someone or something",
+            "sentence": "Plants depend on sunlight and water."
+      },
+      {
+            "word": "wonder",
+            "definition": "a feeling of wanting to know more",
+            "sentence": "She looked at the moon with wonder."
+      },
+      {
+            "word": "protect",
+            "definition": "to keep safe",
+            "sentence": "A helmet helps protect your head."
+      },
+      {
+            "word": "valuable",
+            "definition": "very important or worth a lot",
+            "sentence": "Kind words are valuable."
+      },
+      {
+            "word": "effort",
+            "definition": "hard work",
+            "sentence": "Your effort helped you improve."
+      },
+      {
+            "word": "improve",
+            "definition": "to make better",
+            "sentence": "Practice can help you improve."
+      },
+      {
+            "word": "unusual",
+            "definition": "different from what is expected",
+            "sentence": "The unusual bird had bright blue feet."
+      },
+      {
+            "word": "responsibility",
+            "definition": "something you are trusted to do",
+            "sentence": "Feeding the cat is her responsibility."
+      },
+      {
+            "word": "evidence",
+            "definition": "clues that help prove something",
+            "sentence": "The muddy footprints were evidence."
+      },
+      {
+            "word": "compare",
+            "definition": "to look at how things are alike or different",
+            "sentence": "Compare the two leaves and tell me what you see."
+      },
+      {
+            "word": "fortunate",
+            "definition": "lucky",
+            "sentence": "We were fortunate to see a rainbow."
+      },
+      {
+            "word": "achievement",
+            "definition": "something important you have done",
+            "sentence": "Reading the whole book was an achievement."
+      },
+      {
+            "word": "identify",
+            "definition": "to figure out what something is",
+            "sentence": "Can you identify this animal track?"
+      },
+      {
+            "word": "inspire",
+            "definition": "to make someone want to do something good or great",
+            "sentence": "Her teacher helped inspire her to write stories."
+      },
+      {
+            "word": "resourceful",
+            "definition": "good at solving problems with what you have",
+            "sentence": "The resourceful kids built a fort from blankets."
+      },
+      {
+            "word": "estimate",
+            "definition": "a smart guess",
+            "sentence": "Estimate how many blocks are in the tower."
+      },
+      {
+            "word": "appreciate",
+            "definition": "to understand why something is good or important",
+            "sentence": "I appreciate your help cleaning up."
+      },
+      {
+            "word": "consequence",
+            "definition": "what happens because of an action",
+            "sentence": "A consequence of running inside might be knocking something over."
+      },
+      {
+            "word": "strategy",
+            "definition": "a plan for reaching a goal",
+            "sentence": "Her strategy was to start with the corner pieces."
+      },
+      {
+            "word": "ambitious",
+            "definition": "wanting to do big or difficult things",
+            "sentence": "The ambitious builder made a tall block tower."
+      },
+      {
+            "word": "persuade",
+            "definition": "to convince someone",
+            "sentence": "She tried to persuade her friend to play outside."
+      },
+      {
+            "word": "resilient",
+            "definition": "able to recover after something hard",
+            "sentence": "The resilient flower grew back after the storm."
+      },
+      {
+            "word": "accurate",
+            "definition": "correct and exact",
+            "sentence": "An accurate answer has no mistakes."
+      },
+      {
+            "word": "cooperate",
+            "definition": "to work together",
+            "sentence": "The children cooperate to clean the room."
+      },
+      {
+            "word": "essential",
+            "definition": "very important and needed",
+            "sentence": "Water is essential for plants."
+      },
+      {
+            "word": "opportunity",
+            "definition": "a chance to do something",
+            "sentence": "The field trip was an opportunity to learn."
+      },
+      {
+            "word": "inquisitive",
+            "definition": "eager to ask questions and learn",
+            "sentence": "The inquisitive child asked how bridges stay up."
+      },
+      {
+            "word": "flexible",
+            "definition": "able to change when needed",
+            "sentence": "A flexible plan can still work if it rains."
+      },
+      {
+            "word": "accomplish",
+            "definition": "to successfully finish something",
+            "sentence": "She felt proud to accomplish her goal."
+      },
+      {
+            "word": "independent",
+            "definition": "able to do things on your own",
+            "sentence": "He was independent enough to pack his backpack."
+      },
+      {
+            "word": "analyze",
+            "definition": "to study something carefully",
+            "sentence": "We analyze the story to understand it better."
+      },
+      {
+            "word": "creative",
+            "definition": "able to think of new ideas",
+            "sentence": "The creative artist painted a purple sun."
+      },
+      {
+            "word": "efficient",
+            "definition": "getting things done without wasting time",
+            "sentence": "An efficient cleanup is quick and careful."
+      },
+      {
+            "word": "determined",
+            "definition": "not giving up",
+            "sentence": "The determined runner kept going."
+      },
+      {
+            "word": "perspective",
+            "definition": "a way of seeing or thinking about something",
+            "sentence": "From her perspective, the hill looked huge."
+      },
+      {
+            "word": "logical",
+            "definition": "making sense",
+            "sentence": "His logical plan solved the problem."
+      },
+      {
+            "word": "complex",
+            "definition": "having many parts",
+            "sentence": "The complex Lego set took all afternoon."
+      },
+      {
+            "word": "interpret",
+            "definition": "to explain what something means",
+            "sentence": "She tried to interpret the map."
+      },
+      {
+            "word": "curiosity",
+            "definition": "a strong wish to learn or know more",
+            "sentence": "His curiosity made him ask great questions."
+      },
+      {
+            "word": "synthesize",
+            "definition": "to combine ideas to make something new",
+            "sentence": "She synthesized her ideas into one great story."
+      },
+      {
+            "word": "hypothesis",
+            "definition": "an idea that can be tested",
+            "sentence": "Her hypothesis was that the plant needed more sun."
+      },
+      {
+            "word": "perseverance",
+            "definition": "continuing even when something is hard",
+            "sentence": "Perseverance helped him learn to skate."
       }
-    ];
+];
 
     const startDate = new Date("2026-06-15T00:00:00");
     const today = new Date();
-    const daysSinceStart = Math.floor(
-      (today.setHours(0,0,0,0) - startDate) / (1000 * 60 * 60 * 24)
-    );
+    const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+    const daysSinceStart = Math.floor((todayMidnight - startDate) / (1000 * 60 * 60 * 24));
 
     const entry = words[((daysSinceStart % words.length) + words.length) % words.length];
 
     document.getElementById("date").textContent =
-      new Date().toLocaleDateString(undefined, {
+      today.toLocaleDateString(undefined, {
         weekday: "long",
         month: "long",
         day: "numeric"
@@ -107,6 +518,7 @@
     document.getElementById("word").textContent = entry.word;
     document.getElementById("definition").textContent = entry.definition;
     document.getElementById("sentence").textContent = `“${entry.sentence}”`;
+    document.getElementById("challenge").textContent = `Challenge: Try using “${entry.word}” today.`;
   </script>
 </body>
 </html>
