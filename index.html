@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Word of the Day</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #fff8e7;
+      color: #222;
+      text-align: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 700px;
+    }
+    .date {
+      font-size: 20px;
+      margin-bottom: 24px;
+      color: #666;
+    }
+    .word {
+      font-size: clamp(64px, 14vw, 140px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      margin-bottom: 20px;
+    }
+    .definition {
+      font-size: clamp(24px, 5vw, 42px);
+      line-height: 1.25;
+      font-weight: 500;
+    }
+    .sentence {
+      margin-top: 28px;
+      font-size: clamp(20px, 4vw, 32px);
+      color: #444;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="date" id="date"></div>
+    <div class="word" id="word"></div>
+    <div class="definition" id="definition"></div>
+    <div class="sentence" id="sentence"></div>
+  </div>
+
+  <script>
+    const words = [
+      {
+        word: "curious",
+        definition: "wanting to learn or know more",
+        sentence: "She was curious about how bees make honey."
+      },
+      {
+        word: "brave",
+        definition: "doing something even when it feels scary",
+        sentence: "He was brave when he tried the big slide."
+      },
+      {
+        word: "enormous",
+        definition: "very, very big",
+        sentence: "The elephant had enormous ears."
+      },
+      {
+        word: "gentle",
+        definition: "kind, soft, and careful",
+        sentence: "Use gentle hands with the kitten."
+      },
+      {
+        word: "wander",
+        definition: "to walk around without a plan",
+        sentence: "We wandered through the garden."
+      },
+      {
+        word: "gleam",
+        definition: "to shine softly",
+        sentence: "The stars gleam in the dark sky."
+      },
+      {
+        word: "patient",
+        definition: "able to wait calmly",
+        sentence: "She was patient while her cookies baked."
+      }
+    ];
+
+    const startDate = new Date("2026-06-15T00:00:00");
+    const today = new Date();
+    const daysSinceStart = Math.floor(
+      (today.setHours(0,0,0,0) - startDate) / (1000 * 60 * 60 * 24)
+    );
+
+    const entry = words[((daysSinceStart % words.length) + words.length) % words.length];
+
+    document.getElementById("date").textContent =
+      new Date().toLocaleDateString(undefined, {
+        weekday: "long",
+        month: "long",
+        day: "numeric"
+      });
+
+    document.getElementById("word").textContent = entry.word;
+    document.getElementById("definition").textContent = entry.definition;
+    document.getElementById("sentence").textContent = `“${entry.sentence}”`;
+  </script>
+</body>
+</html>
