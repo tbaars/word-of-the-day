@@ -4,98 +4,74 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Word of the Day</title>
   <style>
-    :root {
-      --ink: #1f2937;
-      --muted: #5f6b7a;
-      --blue: #2f5fda;
-      --card: rgba(255, 255, 255, 0.82);
-    }
     body {
       margin: 0;
-      min-height: 100vh;
+      height: 100vh;
       display: grid;
       place-items: center;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(255, 214, 165, 0.65), transparent 34%),
-        radial-gradient(circle at bottom right, rgba(169, 222, 249, 0.7), transparent 32%),
-        linear-gradient(180deg, #eef6ff 0%, #f8fbff 48%, #fff8e7 100%);
-      color: var(--ink);
+      font-family: Charter, Georgia, "Times New Roman", serif;
+      background: #fff8e7;
+      color: #222;
       text-align: center;
       padding: 24px;
       box-sizing: border-box;
     }
+
     .card {
-      width: min(760px, 100%);
-      background: var(--card);
-      padding: clamp(28px, 7vw, 56px);
-      border-radius: 32px;
-      box-shadow: 0 18px 44px rgba(47, 95, 218, 0.13);
-      border: 1px solid rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(8px);
-      box-sizing: border-box;
+      max-width: 700px;
     }
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 16px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: rgba(47, 95, 218, 0.09);
-      color: var(--blue);
-      font-size: clamp(14px, 3vw, 18px);
-      font-weight: 800;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+
     .date {
-      font-size: clamp(18px, 4vw, 24px);
-      margin-bottom: 18px;
-      color: var(--muted);
-      font-weight: 650;
+      font-size: 20px;
+      margin-bottom: 24px;
+      color: #666;
     }
+
     .word {
-      font-size: clamp(54px, 14vw, 124px);
-      font-weight: 950;
-      letter-spacing: -0.055em;
+      font-size: clamp(58px, 14vw, 130px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
       line-height: 0.95;
-      margin: 8px 0 24px;
-      color: var(--blue);
+      color: #3156b8;
+      margin-bottom: 20px;
       overflow-wrap: anywhere;
     }
+
     .definition {
-      font-size: clamp(24px, 5.4vw, 42px);
-      line-height: 1.22;
-      font-weight: 700;
-      color: #2b3440;
+      font-size: clamp(24px, 5vw, 42px);
+      line-height: 1.3;
+      font-weight: 500;
+      max-width: 600px;
+      margin: 0 auto;
     }
+
     .sentence {
-      margin: 30px auto 0;
-      max-width: 620px;
-      font-size: clamp(20px, 4.3vw, 31px);
-      line-height: 1.32;
-      color: #4b5563;
-      font-style: italic;
-    }
-    .challenge {
       margin-top: 28px;
-      font-size: clamp(17px, 3.8vw, 24px);
-      color: #365314;
-      background: rgba(190, 242, 100, 0.28);
-      padding: 14px 18px;
-      border-radius: 18px;
-      font-weight: 750;
+      font-size: clamp(20px, 4vw, 32px);
+      color: #555;
+      font-style: italic;
+      line-height: 1.3;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .challenge {
+      margin-top: 26px;
+      font-size: clamp(18px, 3.8vw, 26px);
+      color: #42551f;
+      font-weight: 600;
     }
   </style>
 </head>
 <body>
-  <main class="card">
-    <div class="eyebrow">Word of the Day</div>
+  <div class="card">
     <div class="date" id="date"></div>
     <div class="word" id="word"></div>
     <div class="definition" id="definition"></div>
     <div class="sentence" id="sentence"></div>
     <div class="challenge" id="challenge"></div>
-  </main>
+  </div>
 
   <script>
     const words = [
@@ -504,7 +480,9 @@
     const startDate = new Date("2026-06-15T00:00:00");
     const today = new Date();
     const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const daysSinceStart = Math.floor((todayMidnight - startDate) / (1000 * 60 * 60 * 24));
+    const daysSinceStart = Math.floor(
+      (todayMidnight - startDate) / (1000 * 60 * 60 * 24)
+    );
 
     const entry = words[((daysSinceStart % words.length) + words.length) % words.length];
 
@@ -518,7 +496,7 @@
     document.getElementById("word").textContent = entry.word;
     document.getElementById("definition").textContent = entry.definition;
     document.getElementById("sentence").textContent = `“${entry.sentence}”`;
-    document.getElementById("challenge").textContent = `Challenge: Try using “${entry.word}” today.`;
+    document.getElementById("challenge").textContent = `Try using “${entry.word}” today.`;
   </script>
 </body>
 </html>
