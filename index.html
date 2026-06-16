@@ -15,10 +15,18 @@
       text-align: center;
       padding: 24px;
       box-sizing: border-box;
+      overflow: hidden;
+      touch-action: pan-y;
     }
 
     .card {
       max-width: 700px;
+      transition: opacity 140ms ease, transform 140ms ease;
+    }
+
+    .card.fade {
+      opacity: 0;
+      transform: translateY(4px);
     }
 
     .date {
@@ -32,7 +40,7 @@
       font-weight: 700;
       letter-spacing: -0.02em;
       line-height: 0.95;
-      color: #cc785c;
+      color: #3156b8;
       margin-bottom: 20px;
       overflow-wrap: anywhere;
     }
@@ -65,7 +73,7 @@
   </style>
 </head>
 <body>
-  <div class="card">
+  <div class="card" id="card">
     <div class="date" id="date"></div>
     <div class="word" id="word"></div>
     <div class="definition" id="definition"></div>
@@ -480,23 +488,74 @@
     const startDate = new Date("2026-06-15T00:00:00");
     const today = new Date();
     const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-    const daysSinceStart = Math.floor(
-      (todayMidnight - startDate) / (1000 * 60 * 60 * 24)
+    const maxDay = Math.min(
+      words.length - 1,
+      Math.max(0, Math.floor((todayMidnight - startDate) / (1000 * 60 * 60 * 24)))
     );
 
-    const entry = words[((daysSinceStart % words.length) + words.length) % words.length];
+    let currentDay = maxDay;
+    let touchStartX = 0;
+    let touchStartY = 0;
 
-    document.getElementById("date").textContent =
-      today.toLocaleDateString(undefined, {
-        weekday: "long",
-        month: "long",
-        day: "numeric"
-      });
+    function getDateForDay(dayIndex) {
+      const date = new Date(startDate);
+      date.setDate(startDate.getDate() + dayIndex);
+      return date;
+    }
 
-    document.getElementById("word").textContent = entry.word;
-    document.getElementById("definition").textContent = entry.definition;
-    document.getElementById("sentence").textContent = `“${entry.sentence}”`;
-  
+    function renderDay(dayIndex) {
+      const entry = words[dayIndex];
+      const displayDate = getDateForDay(dayIndex);
+
+      document.getElementById("date").textContent =
+        displayDate.toLocaleDateString(undefined, {
+          weekday: "long",
+          month: "long",
+          day: "numeric"
+        });
+
+      document.getElementById("word").textContent = entry.word;
+      document.getElementById("definition").textContent = entry.definition;
+      document.getElementById("sentence").textContent = `“${entry.sentence}”`;
+      document.getElementById("challenge").textContent = `Try using “${entry.word}” today.`;
+    }
+
+    function showDay(dayIndex) {
+      const boundedDay = Math.max(0, Math.min(maxDay, dayIndex));
+      if (boundedDay === currentDay) return;
+
+      const card = document.getElementById("card");
+      card.classList.add("fade");
+
+      window.setTimeout(() => {
+        currentDay = boundedDay;
+        renderDay(currentDay);
+        card.classList.remove("fade");
+      }, 140);
+    }
+
+    document.addEventListener("touchstart", (event) => {
+      touchStartX = event.changedTouches[0].screenX;
+      touchStartY = event.changedTouches[0].screenY;
+    }, { passive: true });
+
+    document.addEventListener("touchend", (event) => {
+      const touchEndX = event.changedTouches[0].screenX;
+      const touchEndY = event.changedTouches[0].screenY;
+      const diffX = touchEndX - touchStartX;
+      const diffY = touchEndY - touchStartY;
+
+      if (Math.abs(diffX) < 55) return;
+      if (Math.abs(diffX) < Math.abs(diffY)) return;
+
+      if (diffX > 0) {
+        showDay(currentDay - 1);
+      } else {
+        showDay(currentDay + 1);
+      }
+    }, { passive: true });
+
+    renderDay(currentDay);
   </script>
 </body>
 </html>
