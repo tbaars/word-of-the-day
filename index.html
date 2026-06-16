@@ -6,7 +6,7 @@
   <style>
     body {
       margin: 0;
-      height: 100vh;
+      min-height: 100vh;
       display: grid;
       place-items: center;
       font-family: Charter, Georgia, "Times New Roman", serif;
@@ -15,18 +15,10 @@
       text-align: center;
       padding: 24px;
       box-sizing: border-box;
-      overflow: hidden;
-      touch-action: pan-y;
     }
 
     .card {
       max-width: 700px;
-      transition: opacity 140ms ease, transform 140ms ease;
-    }
-
-    .card.fade {
-      opacity: 0;
-      transform: translateY(4px);
     }
 
     .date {
@@ -70,15 +62,43 @@
       color: #42551f;
       font-weight: 600;
     }
+
+    .nav {
+      margin-top: 34px;
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+    }
+
+    .nav button {
+      font-family: inherit;
+      font-size: clamp(18px, 4vw, 24px);
+      padding: 10px 18px;
+      border: 1px solid #d8cba9;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.35);
+      color: #555;
+      cursor: pointer;
+    }
+
+    .nav button:disabled {
+      opacity: 0.3;
+      cursor: default;
+    }
   </style>
 </head>
 <body>
-  <div class="card" id="card">
+  <div class="card">
     <div class="date" id="date"></div>
     <div class="word" id="word"></div>
     <div class="definition" id="definition"></div>
     <div class="sentence" id="sentence"></div>
     <div class="challenge" id="challenge"></div>
+
+    <div class="nav">
+      <button id="prev">← Earlier</button>
+      <button id="next">Later →</button>
+    </div>
   </div>
 
   <script>
@@ -488,14 +508,13 @@
     const startDate = new Date("2026-06-15T00:00:00");
     const today = new Date();
     const todayMidnight = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+
     const maxDay = Math.min(
       words.length - 1,
       Math.max(0, Math.floor((todayMidnight - startDate) / (1000 * 60 * 60 * 24)))
     );
 
     let currentDay = maxDay;
-    let touchStartX = 0;
-    let touchStartY = 0;
 
     function getDateForDay(dayIndex) {
       const date = new Date(startDate);
@@ -517,43 +536,30 @@
       document.getElementById("word").textContent = entry.word;
       document.getElementById("definition").textContent = entry.definition;
       document.getElementById("sentence").textContent = `“${entry.sentence}”`;
-      document.getElementById("challenge").textContent = `Try using “${entry.word}” today.`;
-    }
 
-    function showDay(dayIndex) {
-      const boundedDay = Math.max(0, Math.min(maxDay, dayIndex));
-      if (boundedDay === currentDay) return;
-
-      const card = document.getElementById("card");
-      card.classList.add("fade");
-
-      window.setTimeout(() => {
-        currentDay = boundedDay;
-        renderDay(currentDay);
-        card.classList.remove("fade");
-      }, 140);
-    }
-
-    document.addEventListener("touchstart", (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-      touchStartY = event.changedTouches[0].screenY;
-    }, { passive: true });
-
-    document.addEventListener("touchend", (event) => {
-      const touchEndX = event.changedTouches[0].screenX;
-      const touchEndY = event.changedTouches[0].screenY;
-      const diffX = touchEndX - touchStartX;
-      const diffY = touchEndY - touchStartY;
-
-      if (Math.abs(diffX) < 55) return;
-      if (Math.abs(diffX) < Math.abs(diffY)) return;
-
-      if (diffX > 0) {
-        showDay(currentDay - 1);
+      if (dayIndex === maxDay) {
+        document.getElementById("challenge").textContent = `Try using “${entry.word}” today.`;
       } else {
-        showDay(currentDay + 1);
+        document.getElementById("challenge").textContent = "Can you remember what this word means?";
       }
-    }, { passive: true });
+
+      document.getElementById("prev").disabled = dayIndex <= 0;
+      document.getElementById("next").disabled = dayIndex >= maxDay;
+    }
+
+    document.getElementById("prev").addEventListener("click", () => {
+      if (currentDay > 0) {
+        currentDay--;
+        renderDay(currentDay);
+      }
+    });
+
+    document.getElementById("next").addEventListener("click", () => {
+      if (currentDay < maxDay) {
+        currentDay++;
+        renderDay(currentDay);
+      }
+    });
 
     renderDay(currentDay);
   </script>
